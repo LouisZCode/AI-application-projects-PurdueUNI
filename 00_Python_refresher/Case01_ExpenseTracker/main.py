@@ -5,7 +5,6 @@ import os
 import time
 
 
-MONTHLY_BUDGET = 0
 CSV_NAME = "expenses.csv"
 
 
@@ -18,11 +17,6 @@ CSV_NAME = "expenses.csv"
 
 
 
-
-# TO-DO 3: Function that sets and tracks a monthly budget
-#Input: Total ammount they want; make the ammount a unified number (float)
-#Input: Click!
-#Output, sum all the expenses so far, warn if above or below budget.
 
 # TO-DO 4: Save and Load Expenses on CSV     Pandas*
 #Input: program starts
@@ -48,9 +42,23 @@ else:
     print('created a new .csv document\n')
     time.sleep(1)
 
+if os.path.exists('budget.txt'):
+    print('Budget data exists, loading...\n')
+else:
+    print('No budget, creating a new one..!')
+    time.sleep(1)
+    #We create a new empty TXT with the budget as 0:
+    with open('budget.txt', 'w') as budget:
+        budget.write('0')
+
+    print('created a new budget document\n')
+    time.sleep(1)
+
+
+
 print("Welcome to your Expense tracker!!")
 print('--------------------------------------------\n')
-print('Actions:\n01: Add an Expense\n02: Show Expenses\n')
+print('Actions:\n01: Add an Expense\n02: Show Expenses\n03: Set a NEW Budget\n04: Track current Budget\n')
 
 user_decision = input("Please select the action you want to take: ")
 
@@ -77,6 +85,36 @@ def show_data():
     df = pd.read_csv(CSV_NAME)
     print(df)
 
+#03
+def set_budget(new_budget):
+    with open('budget.txt', 'w') as budget:
+        budget.write(str(new_budget))
+    with open('budget.txt', 'r') as budget:
+        read = budget.read()
+        print(f'your new budget is now: ${read}!')
+        
+
+#04
+def track_budget():
+    #We get a hold of the value in the Budget Tracker:
+    with open('budget.txt', 'r') as budget_value:
+        budget = int(budget_value.read())
+
+    #We get a sum of the total expensed in the csv:
+    costs = 100
+
+
+    #We compare both!
+    if budget == 0:
+        print('You have not set a budget yet! all is ok')
+    
+    elif budget > costs:
+        print(f"You have a budget of: {budget}\nYou have a cost so far of {costs}\n\nAll safe still, keep enjoying!")
+    
+    elif budget < costs:
+        print(f"You had a budget of: {budget}\nYou have a cost so far of {costs}\n\nDANGER, stop enjoying!")
+    else:
+        print('Both have the same value, stop spending now')
 
 
 if user_decision == '01':
@@ -97,3 +135,15 @@ if user_decision == '01':
 elif user_decision == "02":
     show_data()
 
+# TO-DO 3: Function that sets and tracks a monthly budget
+#Input: Total ammount they want; make the ammount a unified number (float)
+#Input: Click!
+#Output, sum all the expenses so far, warn if above or below budget.
+
+elif user_decision == "03":
+    budget = input('What is the new budget you want to have?\n')
+    new_budget = str(budget)
+    set_budget(new_budget)
+
+elif user_decision == "04":
+    track_budget()
