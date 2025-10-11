@@ -1,33 +1,13 @@
 import gradio as gr
+
 from datetime import datetime
 import pandas as pd
 import os
 import time
 
-
 CSV_NAME = "expenses.csv"
 
-
-
-#Make an Expense Tracker that can:
-# -Categorize the Expense
-# -Set Monthly Budgets
-# -Save and Load Expense Data
-# -Menu driven Interface
-
-
-
-
-# TO-DO 4: Save and Load Expenses on CSV     Pandas*
-#Input: program starts
-#Output, loads the CSV into the program.
-#If no CSV, create an empty one.
-#Input: click "Save the expenses"
-#Output: updates CSV file.
-
 # TO-DO 5: Create an interactive Menu.
-# Step 1: Create the function that will handle saving the expense
-
 
 #When starting, we need to check if the .csv even exists:
 if os.path.exists(CSV_NAME):
@@ -42,6 +22,8 @@ else:
     print('created a new .csv document\n')
     time.sleep(1)
 
+
+#Same for the budget data:
 if os.path.exists('budget.txt'):
     print('Budget data exists, loading...\n')
 else:
@@ -58,9 +40,12 @@ else:
 
 print("Welcome to your Expense tracker!!")
 print('--------------------------------------------\n')
-print('Actions:\n01: Add an Expense\n02: Show Expenses\n03: Set a NEW Budget\n04: Track current Budget\n')
 
-user_decision = input("Please select the action you want to take: ")
+
+time.sleep(1)
+print('\n\nActions:\n01: Add an Expense\n02: Show Expenses\n03: Set a NEW Budget\n04: Track current Budget\n05: Exit')
+
+user_decision = input("\nPlease select the action you want to take: ")
 
 # TO-DO 1: Function to ask the user for the Expense Details
 #Input: Year of Expense, Category, amount, description
@@ -89,9 +74,7 @@ def show_data():
 def set_budget(new_budget):
     with open('budget.txt', 'w') as budget:
         budget.write(str(new_budget))
-    with open('budget.txt', 'r') as budget:
-        read = budget.read()
-        print(f'your new budget is now: ${read}!')
+    print(f'your new budget is now: ${new_budget}!')
         
 
 #04
@@ -101,7 +84,9 @@ def track_budget():
         budget = int(budget_value.read())
 
     #We get a sum of the total expensed in the csv:
-    costs = 100
+    df = pd.read_csv(CSV_NAME)
+    amounts = df['amount'].sum()
+    costs = amounts
 
 
     #We compare both!
@@ -147,3 +132,11 @@ elif user_decision == "03":
 
 elif user_decision == "04":
     track_budget()
+
+elif user_decision == '05':
+    play = False
+    print("Perfect, thanks for using the tracker!")
+    exit()
+
+else:
+    print('Sorry I did not understand that one, please try again')
