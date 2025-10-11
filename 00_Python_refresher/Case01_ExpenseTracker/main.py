@@ -1,5 +1,4 @@
 import gradio as gr
-
 from datetime import datetime
 import pandas as pd
 import os
@@ -38,11 +37,18 @@ else:
 
 
 
-print("Welcome to your Expense tracker!!")
-print('--------------------------------------------\n')
+with gr.Blocks() as demo:
+    gr.Markdown("#Welcome to Luis Expense Tracker")
+
+    with gr.Column():
+        add_button = gr.Button("Add an Expense")
+        show_button = gr.Button("Show Expenses")
+        set_button = gr.Button("Set a monthly Budge")
+        track_button = gr.Button("Track the Budget")
+
+demo.launch()
 
 
-time.sleep(1)
 print('\n\nActions:\n01: Add an Expense\n02: Show Expenses\n03: Set a NEW Budget\n04: Track current Budget\n05: Exit')
 
 user_decision = input("\nPlease select the action you want to take: ")
